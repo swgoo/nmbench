@@ -11,6 +11,21 @@ function isTreeItemArray(nodes: any[]): nodes is (vscode.TreeItem & { uri: vscod
     return nodes.every(node => node instanceof vscode.TreeItem && 'uri' in node);
 }
 
+
+function runDockerCommandPrefix() {
+    const config = vscode.workspace.getConfiguration('nmbench');
+    if (config.docker.imageName === undefined) {
+        return '';
+    }
+    const workdir_local = vscode.workspace.workspaceFolders?.[0].uri.fsPath;
+    const workdir_container = config.docker.container.workspaceDir;
+
+    const license_file_local = config.licensePath;
+    const license_file_container = config.docker.container.licensePath;
+
+    return `docker run --rm -v ${workdir_local}:${workdir_container} -v ${license_file_local}:${license_file_container} -w ${workdir_container} ${config.docker.imageName}`;
+}
+
 // Function for PsN(Perl-speaks-NONMEM) run
 export function showModFileContextMenu(nodes: (vscode.Uri | (vscode.TreeItem & { uri: vscode.Uri }))[]) {
     let uris: vscode.Uri[];
@@ -65,8 +80,9 @@ export function showModFileContextMenu(nodes: (vscode.Uri | (vscode.TreeItem & {
                 }).then(selectedOptions => {
                     const optionsString = selectedOptions ? selectedOptions.map(opt => opt.label).join(' ') : '';
                     const shellPath = os.platform() === 'win32' ? 'cmd.exe' : undefined;
+                    const docker_cmd = runDockerCommandPrefix();
 
-                    let defaultCommandSyntax = `execute ${optionsString} ${fileNames}`;
+                    let defaultCommandSyntax = `${docker_cmd} execute ${optionsString} ${fileNames}`;
 
                     vscode.window.showInputBox({
                         prompt: `Enter parameters for ${selectedCommand}:`,

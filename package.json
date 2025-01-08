@@ -17,6 +17,31 @@
     "activationEvents": [],
     "main": "./out/extension.js",
     "contributes": {
+        "configuration": {
+            "title": "nmbench",
+            "properties": {
+                "nmbench.docker.imageName": {
+                    "type": "string",
+                    "default": "test",
+                    "description": "a docker image name for NONMEM. If empty, it won't use docker"
+                },
+                "nmbench.docker.container.workspaceDir": {
+                    "type": "string",
+                    "default": "/workspace",
+                    "description": "workspace directory in the docker container"
+                },
+                "nmbench.docker.container.licensePath":{
+                    "type": "string",
+                    "default": "/opt/NONMEM/nm_current/nonmem.lic",
+                    "description": "docker container NONMEM license path"
+                },
+                "nmbench.licensePath": {
+                    "type": "string",
+                    "default": "./nonmem.lic",
+                    "description": "NONMEM license Path"
+                }
+            }
+        },
         "commands": [
             {
                 "command": "extension.readNmTableAndPlot",
