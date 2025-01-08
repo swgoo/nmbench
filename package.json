@@ -22,13 +22,18 @@
             "properties": {
                 "nmbench.docker.imageName": {
                     "type": "string",
-                    "default": "test",
+                    "default": "swgoo/nonmem:7.5.1_PsN_5.4.0_r-ver_4.4.2",
                     "description": "a docker image name for NONMEM. If empty, it won't use docker"
                 },
                 "nmbench.docker.container.workspaceDir": {
                     "type": "string",
                     "default": "/workspace",
                     "description": "workspace directory in the docker container"
+                },
+                "nmbench.docker.container.nonmemPath": {
+                    "type": "string",
+                    "default": "/opt/NONMEM/nm_current/util/nmfe75",
+                    "description": "docker container NONMEM path"
                 },
                 "nmbench.docker.container.licensePath":{
                     "type": "string",
@@ -37,7 +42,7 @@
                 },
                 "nmbench.licensePath": {
                     "type": "string",
-                    "default": "./nonmem.lic",
+                    "default": ".\\nonmem.lic",
                     "description": "NONMEM license Path"
                 }
             }
