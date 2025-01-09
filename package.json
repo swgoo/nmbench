@@ -10,7 +10,7 @@
     ],
     "icon": "resources/logo.png",
     "publisher": "tnzo12",
-    "version": "0.0.8",
+    "version": "0.0.9",
     "engines": {
         "vscode": "^1.89.0"
     },
@@ -22,7 +22,7 @@
             "properties": {
                 "nmbench.docker.imageName": {
                     "type": "string",
-                    "default": "swgoo/nonmem:7.5.1_PsN_5.4.0_r-ver_4.4.2",
+                    "default": "swgoo/nonmem:latest",
                     "description": "a docker image name for NONMEM. If empty, it won't use docker"
                 },
                 "nmbench.docker.container.workspaceDir": {

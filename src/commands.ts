@@ -288,9 +288,10 @@ export function showRScriptCommand(context: vscode.ExtensionContext, nodes: (vsc
         vscode.window.showQuickPick(scriptFiles, { placeHolder: 'Select an R script to execute' }).then(selected => {
             if (selected) {
                 const firstUri = uris[0];
-                let workingDir = path.dirname(firstUri.fsPath);
+                const config = vscode.workspace.getConfiguration('nmbench');
+                const working_dir_local = vscode.workspace.workspaceFolders?.[0].uri.fsPath;
+                let workingDir =config.docker.imageName === undefined || config.docker.imageName === ''? working_dir_local : config.docker.container.workspaceDir;
                 workingDir = toForwardSlashPath(workingDir); // forward slash to the path
-
                 const baseFileName = path.basename(firstUri.fsPath);
 
                 const scriptPath = selected.description!;
@@ -300,7 +301,8 @@ export function showRScriptCommand(context: vscode.ExtensionContext, nodes: (vsc
                 scriptContent = scriptContent.replace(/nmbench_wkdir <- # MODEL_FOLDER_IN/g, `nmbench_wkdir <- "${workingDir}"`);
 
                 const scriptName = `temp_${path.basename(scriptPath)}`;
-                const tempScriptPath = path.join(workingDir, scriptName);
+                // const tempScriptPath = path.join(workingDir, scriptName);
+                const tempScriptPath = path.join(working_dir_local?working_dir_local:'', scriptName);
                 fs.writeFileSync(tempScriptPath, scriptContent);
 
                 const terminalName = path.basename(uris[0].fsPath); // 터미널 이름을 파일 이름으로 설정
